@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 export const connectToDatabase = async () => {
   await mongoose
     .connect(process.env.MONGO_URI, {
-      dbName: "codepen",
+      dbName: "mern-auth",
     })
     .then(() => {
       console.log("Connected to MongoDB");

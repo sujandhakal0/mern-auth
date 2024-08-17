@@ -1,86 +1,85 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { data } from "autoprefixer";
 const Signup = () => {
-  const [username, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Name:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    // Add your signup logic here
+    try {
+      setLoading(true);
+      setError(false);
+      setErrorMessage("");
+      const res = await axios.post("/api/auth/signup", formData);
+      setLoading(false);
+      setError(false);
+      setErrorMessage("");
+      toast.success("User created successfully");
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("Something went wrong!");
+      }
+    }
+    const form = e.target;
+    form.reset();
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-white">Sign Up</h2>
-        <div className="mb-4">
-          <label
-            htmlFor="username"
-            className="block text-gray-400 font-bold mb-2"
-          >
-            Username
-          </label>
+    <div className="w-screen h-screen flex items-center justify-center">
+      <div className="p-3 max-w-lg mx-auto w-full">
+        <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
+            placeholder="Username"
             id="username"
-            value={username}
-            onChange={(e) => setUserName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter your username"
+            className="bg-slate-100 p-3 rounded-lg"
+            onChange={handleChange}
           />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-400 font-bold mb-2">
-            Email
-          </label>
           <input
             type="email"
+            placeholder="Email"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter your email"
+            className="bg-slate-100 p-3 rounded-lg"
+            onChange={handleChange}
           />
-        </div>
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-gray-400 font-bold mb-2"
-          >
-            Password
-          </label>
           <input
             type="password"
+            placeholder="Password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter your password"
+            className="bg-slate-100 p-3 rounded-lg"
+            onChange={handleChange}
           />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Sign Up
+          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+            {loading ? "loading..." : "Signup"}
           </button>
-          <Link
-            to="/signin"
-            className="text-gray-400 hover:text-gray-300 text-base"
-          >
-            Already have an account? <span className="text-blue-300 hover:text-blue-500">Sign in</span> 
+        </form>
+        <div className="flex gap-2 mt-5">
+          <p>Have an account?</p>
+          <Link to="/signin">
+            <span className="text-blue-500">Sign in</span>
           </Link>
         </div>
-      </form>
+        <p className="text-red-500 mt-5">{errorMessage}</p>
+      </div>
     </div>
   );
 };

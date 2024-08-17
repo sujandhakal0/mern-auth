@@ -4,12 +4,24 @@ import dotenv from "dotenv";
 import { connectToDatabase } from "./config/database.js";
 import userRouter from "./routes/user.route.js";
 import Authrouter from "./routes/auth.route.js";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 dotenv.config({ path: "./config/config.env" });
 await connectToDatabase();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    // This line enables credentials
+  })
+);
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", Authrouter);

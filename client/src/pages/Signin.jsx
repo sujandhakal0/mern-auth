@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import {
+  signinStart,
+  signinSuccess,
+  signinFailure,
+} from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { loading, error } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -17,27 +23,16 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      setError(false);
-      setErrorMessage("");
+      dispatch(signinStart());
       const res = await axios.post("/api/auth/signin", formData);
-      setLoading(false);
-      setError(false);
-      setErrorMessage("");
+      dispatch(signinSuccess(res.data));
       toast.success("User Login successfull");
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(true);
-
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setErrorMessage(error.response.data.message);
+      if (error.response.data.message) {
+        dispatch(signinFailure(error.response.data.message));
       } else {
-        setErrorMessage("Something went wrong!");
+        dispatch(signinFailure("Something went wrong"));
       }
     }
     const form = e.target;
@@ -72,7 +67,7 @@ const Signin = () => {
             <span className="text-blue-500">Create an account</span>
           </Link>
         </div>
-        <p className="text-red-500 mt-5">{errorMessage}</p>
+        <p className="text-red-500 mt-5">{error ? error : ""}</p>
       </div>
     </div>
   );

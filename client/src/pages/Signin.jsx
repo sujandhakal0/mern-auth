@@ -8,6 +8,7 @@ import {
   signinFailure,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 
 const Signin = () => {
   const [formData, setFormData] = useState({});
@@ -29,7 +30,11 @@ const Signin = () => {
       toast.success("User Login successfull");
       navigate("/");
     } catch (error) {
-      if (error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         dispatch(signinFailure(error.response.data.message));
       } else {
         dispatch(signinFailure("Something went wrong"));
@@ -60,6 +65,7 @@ const Signin = () => {
           <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
             {loading ? "loading..." : "Login"}
           </button>
+          <OAuth />
         </form>
         <div className="flex gap-2 mt-5">
           <p>Don't have an account?</p>

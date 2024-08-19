@@ -5,10 +5,13 @@ import { connectToDatabase } from "./config/database.js";
 import userRouter from "./routes/user.route.js";
 import Authrouter from "./routes/auth.route.js";
 import cors from "cors";
+import cookieParser from 'cookie-parser'
 
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 dotenv.config({ path: "./config/config.env" });
 await connectToDatabase();

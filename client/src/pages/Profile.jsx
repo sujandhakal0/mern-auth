@@ -54,6 +54,7 @@ const Profile = () => {
           hidden
           accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
+<<<<<<< HEAD
         />
         <img
           src={formData.profilePhoto || currentUser.profilePhoto}
@@ -66,6 +67,18 @@ const Profile = () => {
             <span className="text-red-700">
               Error uploading image(file size must be less then 2 MB)
             </span>
+=======
+        />
+        <img
+          src={currentUser.profilePhoto}
+          alt="Profile-photo"
+          className="h-24 w-24 rounded-full cursor-pointer"
+          onClick={() => fileRef.current.click()}
+        />
+        <p>
+          {imageError ? (
+            <span className="text-red-700">Error uploading image(file size must be less then 2 MB)</span>
+>>>>>>> a58a236bd9f301ca0c9bc96acdba9ee60774e365
           ) : imagePercent > 0 && imagePercent < 100 ? (
             <span className="text-slate-700">{`Uploading image...: ${imagePercent}%`}</span>
           ) : imagePercent === 100 ? (

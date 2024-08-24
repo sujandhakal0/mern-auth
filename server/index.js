@@ -5,24 +5,23 @@ import { connectToDatabase } from "./config/database.js";
 import userRouter from "./routes/user.route.js";
 import Authrouter from "./routes/auth.route.js";
 import cors from "cors";
-import cookieParser from 'cookie-parser'
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 
 dotenv.config({ path: "./config/config.env" });
 await connectToDatabase();
 
 app.use(
   cors({
-    origin: "https://mern-auth-git-main-moonergone0s-projects.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "https://mern-auth-ebon-sigma.vercel.app/",
+    methods: "*",
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-    // This line enables credentials
   })
 );
 

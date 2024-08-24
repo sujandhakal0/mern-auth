@@ -16,9 +16,10 @@ app.use(cookieParser());
 dotenv.config({ path: "./config/config.env" });
 await connectToDatabase();
 
+const allowedOrigins = ["https://mern-auth-ebon-sigma.vercel.app/"];
 app.use(
   cors({
-    origin: "https://mern-auth-ebon-sigma.vercel.app/",
+    origin: allowedOrigins,
     methods: "*",
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

@@ -18,7 +18,7 @@ await connectToDatabase();
 
 app.use(
   cors({
-    origin: "https://vercel.com/moonergone0s-projects/mern-auth/XgAAiMGyXyXE459AhLGWGEpiH5wm",
+    origin: "https://mern-auth-ebon-sigma.vercel.app/",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

@@ -4,13 +4,12 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://mern-auth-backend-27h1.onrender.com",
-        // changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "https://mern-auth-backend-27h1.onrender.com",
+  //       secure: false,
+  //     },
+  //   },
+  // },
 });

@@ -11,11 +11,18 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserFailure,
+  deleteUserSuccess,
+  signOut,
 } from "../redux/user/userSlice";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
   const [imagePercent, setImagePercent] = useState(0);
@@ -75,6 +82,32 @@ const Profile = () => {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error));
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await axios.delete(`/api/user/delete/${currentUser._id}`);
+      const data = res.data;
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+      navigate("/");
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await axios.post("/api/auth/signout");
+      dispatch(signOut());
+      navigate("/");
+    } catch (error) {
+      toast.error(error);
     }
   };
 
@@ -139,8 +172,12 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between mt-4">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
-        <span className="text-red-700 cursor-pointer">Signout</span>
+        <span className="text-red-700 cursor-pointer" onClick={handleDelete}>
+          Delete Account
+        </span>
+        <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
+          Signout
+        </span>
       </div>
       <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
       <p className="text-green-700 mt-5">

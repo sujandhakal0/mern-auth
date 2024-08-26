@@ -70,7 +70,7 @@ const Profile = () => {
     try {
       dispatch(updateUserStart());
       const res = await axios.post(
-        `https://mern-auth-backend-27h1.onrender.com/api/user/update/${currentUser._id}`,
+        `/api/user/update/${currentUser._id}`,
         formData
       );
       const data = res.data;
@@ -88,7 +88,7 @@ const Profile = () => {
   const handleDelete = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await axios.delete(`https://mern-auth-backend-27h1.onrender.com/api/user/delete/${currentUser._id}`);
+      const res = await axios.delete(`/api/user/delete/${currentUser._id}`);
       const data = res.data;
       if (data.success === false) {
         dispatch(deleteUserFailure(data));
@@ -103,7 +103,7 @@ const Profile = () => {
 
   const handleSignOut = async () => {
     try {
-      await axios.post("https://mern-auth-backend-27h1.onrender.com/api/auth/signout");
+      await axios.post("/api/auth/signout");
       dispatch(signOut());
       navigate("/");
     } catch (error) {

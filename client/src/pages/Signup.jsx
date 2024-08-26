@@ -22,7 +22,7 @@ const Signup = () => {
       setLoading(true);
       setError(false);
       setErrorMessage("");
-      const res = await axios.post("https://mern-auth-backend-27h1.onrender.com/api/auth/signup", formData);
+      const res = await axios.post("/api/auth/signup", formData);
       setLoading(false);
       setError(false);
       setErrorMessage("");
